@@ -1,0 +1,160 @@
+public class bits {
+	public static String binary(int num){
+		return Integer.toBinaryString(num);
+	}
+	
+	public static boolean isPalindrome(String seq){
+        int length = seq.length();
+        char[] reversedArr = seq.toCharArray();
+        for(int i = 0; i < length / 2; i++){
+        	char tempChar = reversedArr[i];
+        	reversedArr[i] = reversedArr[length - 1 - i];
+        	reversedArr[length - 1 - i] = tempChar;
+        }
+        String reversedString = "";
+        for(int i = 0; i < reversedArr.length; i++){
+        	reversedString += reversedArr[i];
+        }
+
+		if(seq.equals(reversedString.toString())){
+			return true;
+		}
+		return false;
+	}
+	
+	public static int kPositiveInt(int K){
+		int tempPos = 0;
+		int posInt = 1;
+		while(tempPos < K){
+			if(isPalindrome(binary(posInt))){
+				tempPos++;
+			}
+			posInt++;
+		}
+		return posInt - 1;
+	}
+	
+	public static void main(String[] args){
+		int testCase1 = kPositiveInt(1);
+		System.out.println(testCase1);
+		
+		int testCase2 = kPositiveInt(2);
+		System.out.println(testCase2);
+		
+		int testCase3 = kPositiveInt(3);
+		System.out.println(testCase3);
+		
+		int testCase4 = kPositiveInt(0);
+		System.out.println(testCase4);
+		
+		int testCase5 = kPositiveInt(-1);
+		System.out.println(testCase5);
+	}
+}
+
+
+//I know that this is time inefficient, but I left
+//this solution instead of Manacher's algorithm
+//because I didn't think of it myself, but found it online
+public class string {
+	
+	public static String result(String seq){
+		int[] palindrome = palindromes(seq);
+		return "index: " + palindrome[1] + " length: " + palindrome[0];
+	}
+
+	public static boolean isPalindrome(String seq){
+        int length = seq.length();
+        char[] reversedArr = seq.toCharArray();
+        if(length == 1){
+        	return false;
+        }
+        for(int i = 0; i < length / 2; i++){
+        	char tempChar = reversedArr[i];
+        	reversedArr[i] = reversedArr[length - 1 - i];
+        	reversedArr[length - 1 - i] = tempChar;
+        }
+        String reversedString = "";
+        for(int i = 0; i < reversedArr.length; i++){
+        	reversedString += reversedArr[i];
+        }
+		if(seq.equals(reversedString.toString())){
+			return true;
+		}
+		return false;
+	}
+	
+	public static int[] palindromes(String seq){
+		int[] result = new int[2]; 
+		result[0] = 0;
+		result[1] = 0;
+		for(int i = 0; i < seq.length(); i++){
+			for(int j = seq.length(); j > 0 && j > i; j--){
+				//finds the first longest palindrome
+				if(isPalindrome(seq.substring(i, j)) && result[0] < seq.substring(i, j).length()){
+					result[0] = seq.substring(i, j).length();
+					result[1] = i;
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static void main(String[] args){
+		System.out.println(result("bananas"));
+		System.out.println(result("hana"));
+		System.out.println(result(""));
+		System.out.println(result("ba"));
+		System.out.println(result("anana"));
+	}
+
+
+}
+
+
+public class UglyNumbers {
+	public static int kNumber(int K){
+	  int pos = 1;
+	  int x = 1;
+	  while(pos <= K && pos > 0){
+		  if(isUgly(x) == 1){
+			  x++;
+			  pos++;
+		  }else{
+			  x++;
+		  }
+	  }
+	  return x - 1;
+	}
+
+	public static int isUgly(int x){
+		if(x % 2 == 0){
+		  return isUgly(x /= 2);
+		}
+		if(x % 3 == 0){
+		  return isUgly(x /= 3);
+		}
+		if(x % 5 == 0){
+		  return isUgly(x /= 5);
+		}else{	  
+		  if(x == 1){
+		    return 1;
+		  } else{
+		    return -1;
+		    }
+		}
+	}
+	
+	public static void main(String[] args){
+		System.out.println(kNumber(1));
+		System.out.println(kNumber(2));
+		System.out.println(kNumber(3));
+		System.out.println(kNumber(4));
+		System.out.println(kNumber(5));
+		System.out.println(kNumber(6));
+		System.out.println(kNumber(7));
+		System.out.println(kNumber(8));
+		System.out.println(kNumber(9));
+		System.out.println(kNumber(10));
+	}
+}
